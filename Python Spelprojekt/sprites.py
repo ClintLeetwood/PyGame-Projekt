@@ -1,3 +1,4 @@
+#from logging import _Level
 import pygame
 from config import *
 import math
@@ -77,6 +78,19 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y=hits[0].rect.top - self.rect.height
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
+    def collide_doors(self,direction):
+        if direction=="y":
+            hits= pygame.sprite.spritecollide(self,self.game.doors,False)
+            if hits:
+                if Door1.open()==True:
+                    self.game.state="level1"
+                else:
+                    if self.y_change>0:
+                        self.rect.y=hits[0].rect.top - self.rect.height
+                    if self.y_change<0:
+                        self.rect.y=hits[0].rect.bottom 
+                
+        
     
 
 
@@ -125,8 +139,11 @@ class Block(pygame.sprite.Sprite): #creates the walls
 
 class Door1(pygame.sprite.Sprite): #Creates the doors
     def __init__(self,game,x,y):
-        self.open=True
         self.game=game
+        def open():
+
+            self.open=True
+        
         self._layer=DOOR_LAYER
         self.groups=self.game.all_sprites,self.game.doors
         pygame.sprite.Sprite.__init__(self,self.groups)
