@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self,game,x,y): #x,y gives the location of the player 
         self.game=game
         self._layer=PLAYER_LAYER #so the player is not under anything
-        self.groups=self.game.all_sprites
+        self.groups=self.game.all_sprites, self.game.player
         pygame.sprite.Sprite.__init__(self,self.groups)#adds player too all sprites
         self.x=x*TILESIZE
         self.y=y*TILESIZE
@@ -63,17 +63,23 @@ class Player(pygame.sprite.Sprite):
         if direction=="x":
             hits= pygame.sprite.spritecollide(self,self.game.blocks,False)
             if hits:
+                
                 if self.x_change>0:
                     self.rect.x=hits[0].rect.left-self.rect.width
                 if self.x_change<0:
                     self.rect.x=hits[0].rect.right
         if direction=="y":
+            
             hits=pygame.sprite.spritecollide(self,self.game.blocks,False)
             if hits:
+                
                 if self.y_change>0:
                     self.rect.y=hits[0].rect.top - self.rect.height
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
+    
+
+
                 
 
 
@@ -117,9 +123,9 @@ class Block(pygame.sprite.Sprite): #creates the walls
         self.rect.x=self.x
         self.rect.y=self.y
 
-class Door(pygame.sprite.Sprite): #Creates the doors
+class Door1(pygame.sprite.Sprite): #Creates the doors
     def __init__(self,game,x,y):
-
+        self.open=True
         self.game=game
         self._layer=DOOR_LAYER
         self.groups=self.game.all_sprites,self.game.doors
@@ -136,4 +142,41 @@ class Door(pygame.sprite.Sprite): #Creates the doors
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
+class Door2(pygame.sprite.Sprite): #Creates the doors
+    def __init__(self,game,x,y):
+        self.open=False
+        self.game=game
+        self._layer=DOOR_LAYER
+        self.groups=self.game.all_sprites,self.game.doors
+        pygame.sprite.Sprite.__init__(self,self.groups)
 
+        self.x=x*TILESIZE
+        self.y=y*TILESIZE
+        self.width=TILESIZE
+        self.height=TILESIZE
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(BLACK)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
+class Door3(pygame.sprite.Sprite): #Creates the doors
+    def __init__(self,game,x,y):
+        self.open=False
+        self.game=game
+        self._layer=DOOR_LAYER
+        self.groups=self.game.all_sprites,self.game.doors
+        pygame.sprite.Sprite.__init__(self,self.groups)
+
+        self.x=x*TILESIZE
+        self.y=y*TILESIZE
+        self.width=TILESIZE
+        self.height=TILESIZE
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(RED)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
