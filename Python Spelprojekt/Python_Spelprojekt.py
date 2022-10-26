@@ -17,6 +17,9 @@ class Game:
                     Block(self,j,i)
                 if column=="P":
                     Player(self,j,i)
+                if column=="D":
+                    Door(self,j,i)
+
 
     def new(self):
         #the start of the new game
@@ -24,6 +27,7 @@ class Game:
 
         self.all_sprites=pygame.sprite.LayeredUpdates()
         self.blocks=pygame.sprite.LayeredUpdates() #the wallllsss
+        self.doors=pygame.sprite.LayeredUpdates()
 
         self.Tilemap()
     
@@ -52,6 +56,12 @@ class Game:
             self.update()
             self.draw()
         self.running=False #when the game is over
+    def level1(self):
+        while Player.hp>0:
+            self.playing=True
+            self.event()
+            
+        pass
 
     def game_over(self):
         pass
