@@ -36,6 +36,12 @@ class Player(pygame.sprite.Sprite):
         self.x_change=0 #otherwise it keeps moving
         self.y_change=0
 
+    def health(self):
+        self.hp=100
+        hit=pygame.sprite.damage(self,self.game.damage,False)
+        if hit:
+            self.hp-=self.damage
+
 
 
     def movement(self):
@@ -71,6 +77,24 @@ class Player(pygame.sprite.Sprite):
                 
 
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self,game,x,y):
+        self.game=game
+        self._layer=BLOCK_LAYER
+        self.groups=self.game.all_sprites, self.game.enemy
+        pygame.sprite.Sprite.__init__(self,self.groups)
+
+        self.x=x*TILESIZE
+        self.y=y*TILESIZE
+        self.width=TILESIZE
+        self.height=TILESIZE
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(BLUE)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
 
 
 class Block(pygame.sprite.Sprite): #creates the walls
@@ -92,3 +116,24 @@ class Block(pygame.sprite.Sprite): #creates the walls
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
+
+class Door(pygame.sprite.Sprite): #Creates the doors
+    def __init__(self,game,x,y):
+
+        self.game=game
+        self._layer=DOOR_LAYER
+        self.groups=self.game.all_sprites,self.game.doors
+        pygame.sprite.Sprite.__init__(self,self.groups)
+
+        self.x=x*TILESIZE
+        self.y=y*TILESIZE
+        self.width=TILESIZE
+        self.height=TILESIZE
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(BROWN)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
+
