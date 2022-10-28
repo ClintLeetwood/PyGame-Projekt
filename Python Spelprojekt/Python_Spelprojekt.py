@@ -58,7 +58,7 @@ class Game:
     def statemanager(self):
         if self.state=="hallway":
             self.hallway()
-        if self.state=="level1":
+        if self.state=="level1" :
             self.level1()
     def hallway(self):
         #game loop
@@ -71,7 +71,9 @@ class Game:
 
         self.running=False #when the game is over
     def level1(self):
-        pygame.quit()
+        while self.playing:
+            self.screen.fill(BLUE)
+        self.running=False
         #while self.player.hp>0:
          #   self.playing=True
           #  self.event()
