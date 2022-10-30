@@ -37,7 +37,13 @@ class Player(pygame.sprite.Sprite):
         self.x_change=0 #otherwise it keeps moving
         self.y_change=0
         if pygame.sprite.spritecollide(self,self.game.doors,False):
-           pass #needs to activate Game loop statemanager
+            from Python_Spelprojekt import Game
+            #obj=Game()
+            
+            g=Game("level1")
+            
+            g.statemanager()
+            
 
     def health(self):
         self.hp=100

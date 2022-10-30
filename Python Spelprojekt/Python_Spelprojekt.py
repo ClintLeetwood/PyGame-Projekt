@@ -3,9 +3,9 @@ from sprites import *
 from config import *
 import sys
 class Game:
-    def __init__(self):
+    def __init__(self,state):
         pygame.init()
-        self.state="hallway"
+        self.state=state
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
         #self.font=pygame.font.Font('Arial',32)
@@ -35,6 +35,13 @@ class Game:
         self.doors=pygame.sprite.LayeredUpdates()
         self.all_sprites=pygame.sprite.LayeredUpdates()
         self.Tilemap()
+
+    def resetstate(self):
+        self.playing=True
+        self.player.empty()
+        self.blocks.empty()
+        self.doors.empty()
+        self.all_sprites
     
     def events(self):
         for event in pygame.event.get():
@@ -55,25 +62,37 @@ class Game:
         self.all_sprites.draw(self.screen) #puts everything on the window
         self.clock.tick(FPS) #how many time per second it updates
         pygame.display.update() #gives the updated screen
+    def drawArena(self):
+        self.screen.fill(BLUE)
+
     def statemanager(self):
         if self.state=="hallway":
             self.hallway()
         if self.state=="level1" :
+            
             self.level1()
     def hallway(self):
         #game loop
         
-        while self.playing:
+        #while self.playing:
             self.events()
-            self.update()
             self.draw()
+            self.update()
+            
+            
             
 
-        self.running=False #when the game is over
+            
+
+        #self.running=False #when the game is over
     def level1(self):
-        while self.playing:
-            self.screen.fill(BLUE)
-        self.running=False
+        
+        
+        
+        self.events()
+        self.screen.fill(BLUE)
+        pygame.display.update()
+        
         #while self.player.hp>0:
          #   self.playing=True
           #  self.event()
@@ -89,9 +108,10 @@ class Game:
     def intro_screen(self):
         pass
 
-g=Game()
+g=Game("hallway")
 g.intro_screen()
 g.new()
+
 while g.running:
     g.statemanager()
     g.game_over()
