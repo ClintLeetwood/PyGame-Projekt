@@ -40,8 +40,8 @@ class Player(pygame.sprite.Sprite):
             from Python_Spelprojekt import Game
             #obj=Game()
             
-            g=Game("level1")
-            
+            g=Game()
+            g.state="level1"
             g.statemanager()
             
 

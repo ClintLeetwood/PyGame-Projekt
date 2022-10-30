@@ -3,9 +3,9 @@ from sprites import *
 from config import *
 import sys
 class Game:
-    def __init__(self,state):
+    def __init__(self):
         pygame.init()
-        self.state=state
+        self.state="hallway"
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
         #self.font=pygame.font.Font('Arial',32)
@@ -108,10 +108,10 @@ class Game:
     def intro_screen(self):
         pass
 
-g=Game("hallway")
+g=Game()
 g.intro_screen()
 g.new()
-
+g.state="hallway"
 while g.running:
     g.statemanager()
     g.game_over()
