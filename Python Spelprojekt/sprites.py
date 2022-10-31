@@ -24,8 +24,18 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
         self.rect.y=self.y
+        self.level="hallway"
 
     def update(self):
+        if pygame.sprite.spritecollide(self,self.game.doors,False):
+            
+            #obj=Game()
+            
+            
+            self.level="level1"
+            #g.statemanager("lev)
+            return 
+          
         self.movement()
 
         self.rect.x += self.x_change
@@ -36,13 +46,7 @@ class Player(pygame.sprite.Sprite):
 
         self.x_change=0 #otherwise it keeps moving
         self.y_change=0
-        if pygame.sprite.spritecollide(self,self.game.doors,False):
-            from Python_Spelprojekt import Game
-            #obj=Game()
-            
-            g=Game()
-            g.state="level1"
-            g.statemanager()
+        
             
 
     def health(self):

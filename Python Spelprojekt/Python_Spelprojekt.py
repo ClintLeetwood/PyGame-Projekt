@@ -16,8 +16,8 @@ class Game:
             for j, column in enumerate(row): #x position
                 if column=="B":
                     Block(self,j,i)
-                if column=="P":
-                    Player(self,j,i)
+                #if column=="P":
+                   # Player(self,j,i)
                 if column=="1":
                     Door1(self,j,i)
                 if column=="2":
@@ -38,10 +38,9 @@ class Game:
 
     def resetstate(self):
         self.playing=True
-        self.player.empty()
-        self.blocks.empty()
-        self.doors.empty()
-        self.all_sprites
+        self.player= pygame.sprite.remove()
+
+        self.all_sprites.empty()
     
     def events(self):
         for event in pygame.event.get():
@@ -58,39 +57,44 @@ class Game:
         self.all_sprites.update()
 
     def draw(self):
+    
         self.screen.fill(BLACK) #creates the background for the winodw
         self.all_sprites.draw(self.screen) #puts everything on the window
         self.clock.tick(FPS) #how many time per second it updates
+    
         pygame.display.update() #gives the updated screen
     def drawArena(self):
         self.screen.fill(BLUE)
+        self.clock.tick(FPS)
 
-    def statemanager(self):
-        if self.state=="hallway":
+    def statemanager(self,level):
+        if level=="intro":
+            self.intro_screen()
+        if level=="hallway":
             self.hallway()
-        if self.state=="level1" :
-            
+        if level=="level1" :
             self.level1()
     def hallway(self):
         #game loop
-        
+        #self.new()
         #while self.playing:
-            self.events()
-            self.draw()
-            self.update()
-            
-            
+        self.events()
+        self.draw()
+        self.update()
+        
+       # print(self.state)
             
 
             
 
         #self.running=False #when the game is over
     def level1(self):
-        
-        
+    
         
         self.events()
         self.screen.fill(BLUE)
+        self.all_sprites.remove(self.screen)
+        self.clock.tick(FPS)
         pygame.display.update()
         
         #while self.player.hp>0:
@@ -106,15 +110,28 @@ class Game:
     def game_over(self):
         pass
     def intro_screen(self):
-        pass
+        
+        for event in pygame.event.get():
+            if event.type==pygame.quit:
+                pygame.quit()
+                sys.exit()
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                self.state="hallway"
+        self.screen.fill(RED)
 
 g=Game()
-g.intro_screen()
+
 g.new()
-g.state="hallway"
+
+p=Player(g,4,6)
 while g.running:
-    g.statemanager()
-    g.game_over()
+    
+    
+    g.statemanager(p.level)
+    
+   
+
+    
 
 pygame.quit()
 sys.exit()
