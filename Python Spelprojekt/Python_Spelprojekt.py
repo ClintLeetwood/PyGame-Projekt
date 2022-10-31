@@ -68,6 +68,7 @@ class Game:
         self.clock.tick(FPS)
 
     def statemanager(self,level):
+        
         if level=="intro":
             self.intro_screen()
         if level=="hallway":
@@ -77,11 +78,11 @@ class Game:
     def hallway(self):
         #game loop
         #self.new()
-        #while self.playing:
-        self.events()
-        self.draw()
-        self.update()
         
+            self.events()
+            self.draw()
+            self.update()
+
        # print(self.state)
             
 
@@ -111,19 +112,15 @@ class Game:
         pass
     def intro_screen(self):
         
-        for event in pygame.event.get():
-            if event.type==pygame.quit:
-                pygame.quit()
-                sys.exit()
-            if event.type==pygame.MOUSEBUTTONDOWN:
-                self.state="hallway"
+        self.events()   
         self.screen.fill(RED)
-
+        self.update()
+        pygame.display.update()
 g=Game()
 
 g.new()
 
-p=Player(g,4,6)
+p=Player(g,4,6) #skapar objektet
 while g.running:
     
     

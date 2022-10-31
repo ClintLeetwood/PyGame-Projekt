@@ -24,9 +24,14 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
         self.rect.y=self.y
-        self.level="hallway"
+        self.level="intro"
+        
 
     def update(self):
+        
+           
+        if pygame.mouse.get_pressed()[0]:
+            self.level="hallway"
         if pygame.sprite.spritecollide(self,self.game.doors,False):
             
             #obj=Game()
