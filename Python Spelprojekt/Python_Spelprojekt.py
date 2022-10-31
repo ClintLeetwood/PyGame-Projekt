@@ -36,11 +36,7 @@ class Game:
         self.all_sprites=pygame.sprite.LayeredUpdates()
         self.Tilemap()
 
-    def resetstate(self):
-        self.playing=True
-        self.player= pygame.sprite.remove()
-
-        self.all_sprites.empty()
+    
     
     def events(self):
         for event in pygame.event.get():
