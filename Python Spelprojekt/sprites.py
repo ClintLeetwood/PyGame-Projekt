@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.game=game
         self._layer=PLAYER_LAYER #so the player is not under anything
         self.groups=self.game.all_sprites, self.game.player
-        pygame.sprite.Sprite.__init__(self,self.groups)#adds player too all sprites
+        pygame.sprite.Sprite.__init__(self,self.groups)#adds player to all sprites
         self.x=x*TILESIZE
         self.y=y*TILESIZE
         self.width=TILESIZE
@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.y_change=0
         self.facing='down'
 
-        self.image=pygame.Surface([self.width,self.height])#right now the player is sqaure fill in pic later
+        self.image=pygame.Surface([self.width,self.height])#right now the player is square fill in pic later
         self.image.fill(RED)
 
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
