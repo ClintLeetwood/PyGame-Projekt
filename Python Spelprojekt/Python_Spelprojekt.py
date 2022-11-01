@@ -7,12 +7,13 @@ class Game:
     
     def __init__(self):
         pygame.init()
-        
+        self.font=pygame.font.Font('/home/emetje02/PyGame-Projekt/Python Spelprojekt/comici.ttf',20)
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
         #self.font=pygame.font.Font('Arial',32)
         self.running=True
         self.static=0
+        self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
@@ -148,9 +149,24 @@ class Game:
     def game_over(self):
         pass
     def intro_screen(self):
+        title=self.font.render('First term Simulator',True, WHITE)
+        title_rect=title.get_rect(x=200,y=10)
+        self.screen.blit(self.intro_background,(0,0))
+        self.screen.blit(title,title_rect)
+        play_button=Button(10,50,100,50,BLUE,WHITE,'Play',32)
+        quit_button=Button(190,300,100,50,BLUE,WHITE,'QUIT',32)
+    
+        mouse_pos=pygame.mouse.get_pos()
+        mouse_pressed=pygame.mouse.get_pressed()
+        self.screen.blit(play_button.image,play_button.rect) 
+        self.screen.blit(quit_button.image,quit_button.rect) 
+        if play_button.is_pressed(mouse_pos,mouse_pressed):
+            return True
+        if quit_button.is_pressed(mouse_pos,mouse_pressed):
+            self.running=False
         
         self.events()   
-        self.screen.fill(BLUE)
+        #self.screen.fill(BLUE)
         self.update()
         pygame.display.update()
 g=Game()

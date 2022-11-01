@@ -29,18 +29,19 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         
-        f=FIGHT()
-        if pygame.mouse.get_pressed()[0]:
-            self.level="hallway"
             
+        from Python_Spelprojekt import Game
+        if Game.intro_screen==True:
+            self.level="hallway"
+        f=FIGHT()    
         if pygame.sprite.spritecollide(self,self.game.door1,False):
             
             self.level="level1"
             
-        if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
-            self.rect.y=self.y+7
+        #if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
+         #   self.rect.y=self.y+7
            
-            self.level="hallway"     
+          #  self.level="hallway"     
         if f.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
             
@@ -255,3 +256,29 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
+
+class Button:
+    def __init__(self,x,y,width,height,fg,bg,content,fontsize):
+        self.content=content
+        self.font=pygame.font.Font('/home/emetje02/PyGame-Projekt/Python Spelprojekt/comici.ttf',fontsize)
+        self.x=x
+        self.y=y
+        self.height=height
+        self.width=width
+        self.fg=fg
+        self.bg=bg
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(self.bg)
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
+        self.text=self.font.render(self.content,True,self.fg)
+        self.text_rect=self.text.get_rect(center=(self.width//2,self.height//2))
+        self.image.blit(self.text,self.text_rect) 
+    def is_pressed(self,pos,pressed):
+        if self.rect.collidepoint(pos):
+            if pressed[0]:
+                return True
+            return False
+        return False
