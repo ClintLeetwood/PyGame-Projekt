@@ -1,24 +1,23 @@
-from re import A
-from this import d
-from typing_extensions import Self
-from xmlrpc.client import Boolean
-from Python Spelprojekt.sprites import Player
 import pygame
-import sprites
+from sprites import *
+#Skapa objekt för spelare och motståndare från respektive klass
+
 
 class Fight:
     def __init__(self,menu,x,y):
     
     def fight(self,win):
-        while Player()
-        win=0
+        win=False
         cpuchoice=0
-        self.playerattack=
-        self.playerdefend=False         
-        self.enemydefend=False 
-        self.enemyattack=
+        playerHP=Player.health(self)
+        playerdefstate=0
+        enemyHP=Enemy.health
+        enemydefstate=0
         
         
         self.exec
+        if win=True
+            
+
 
         
