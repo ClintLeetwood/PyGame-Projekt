@@ -7,7 +7,7 @@ class Game:
     
     def __init__(self):
         pygame.init()
-        self.font=pygame.font.Font('/home/emetje02/PyGame-Projekt/Python Spelprojekt/comici.ttf',20)
+        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',20)
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
         #self.font=pygame.font.Font('Arial',32)
@@ -146,31 +146,38 @@ class Game:
             
         
 
-    def game_over(self):
+    def you_win(self):
         pass
-    def intro_screen(self):
-        title=self.font.render('First term Simulator',True, WHITE)
-        title_rect=title.get_rect(x=200,y=10)
-        self.screen.blit(self.intro_background,(0,0))
-        self.screen.blit(title,title_rect)
-        play_button=Button(10,50,100,50,BLUE,WHITE,'Play',32)
-        quit_button=Button(190,300,100,50,BLUE,WHITE,'QUIT',32)
-    
-        mouse_pos=pygame.mouse.get_pos()
-        mouse_pressed=pygame.mouse.get_pressed()
-        self.screen.blit(play_button.image,play_button.rect) 
-        self.screen.blit(quit_button.image,quit_button.rect) 
-        if play_button.is_pressed(mouse_pos,mouse_pressed):
-            return True
-        if quit_button.is_pressed(mouse_pos,mouse_pressed):
-            self.running=False
-        
-        self.events()   
-        #self.screen.fill(BLUE)
-        self.update()
-        pygame.display.update()
-g=Game()
 
+    def intro_screen(self):
+        intro=True
+        self.running=True
+        title=self.font.render('First term Simulator',True, WHITE)
+        title_rect=title.get_rect(x=220,y=30)
+        
+        play_button=Button(270,200,100,50,BLUE,WHITE,'Play',32)
+        quit_button=Button(270,300,100,50,BLUE,WHITE,'QUIT',32)
+        while intro:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT: #checks if window is closed
+                    intro=False
+                    self.running=False
+            mouse_pos=pygame.mouse.get_pos()
+            mouse_pressed=pygame.mouse.get_pressed()
+        
+            if play_button.is_pressed(mouse_pos,mouse_pressed):
+                intro=False 
+            if quit_button.is_pressed(mouse_pos,mouse_pressed):
+                intro=False
+                self.running=False
+
+            self.screen.blit(self.intro_background,(0,0))
+            self.screen.blit(title,title_rect)
+            self.screen.blit(play_button.image,play_button.rect) 
+            self.screen.blit(quit_button.image,quit_button.rect) 
+            pygame.display.update()
+g=Game()
+g.intro_screen()
 g.new()
 
 
@@ -178,11 +185,7 @@ p=Player(g,4,6) #skapar objektet
 
 while g.running:
     
-    
     g.statemanager(p.level)
-    
-   
-
     
 
 pygame.quit()

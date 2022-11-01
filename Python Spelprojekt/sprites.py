@@ -24,24 +24,23 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
         self.rect.y=self.y
-        self.level="intro"
+        self.level="hallway"
         
 
     def update(self):
         
             
-        from Python_Spelprojekt import Game
-        if Game.intro_screen==True:
-            self.level="hallway"
+        
+        
         f=FIGHT()    
         if pygame.sprite.spritecollide(self,self.game.door1,False):
             
             self.level="level1"
             
-        #if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
-         #   self.rect.y=self.y+7
+        if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
+            self.rect.y=self.y+7
            
-          #  self.level="hallway"     
+            self.level="hallway"     
         if f.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
             
@@ -260,7 +259,7 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
 class Button:
     def __init__(self,x,y,width,height,fg,bg,content,fontsize):
         self.content=content
-        self.font=pygame.font.Font('/home/emetje02/PyGame-Projekt/Python Spelprojekt/comici.ttf',fontsize)
+        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',fontsize)
         self.x=x
         self.y=y
         self.height=height
