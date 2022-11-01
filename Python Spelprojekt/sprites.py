@@ -29,18 +29,31 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         
-           
+        f=FIGHT()
         if pygame.mouse.get_pressed()[0]:
             self.level="hallway"
-        if pygame.sprite.spritecollide(self,self.game.doors,False):
             
-            #obj=Game()
-            
+        if pygame.sprite.spritecollide(self,self.game.door1,False):
             
             self.level="level1"
-            #g.statemanager("lev)
-            return 
-          
+            
+        if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
+            self.rect.y=self.y+7
+           
+            self.level="hallway"     
+        if f.win==1:
+            if pygame.sprite.spritecollide(self,self.game.door2,False):
+            
+                self.level="level2"
+            
+                 
+        if f.win==2:
+            if pygame.sprite.spritecollide(self,self.game.door3,False):
+            
+                self.level="level3"
+        
+            
+                 
         self.movement()
 
         self.rect.x += self.x_change
@@ -54,11 +67,7 @@ class Player(pygame.sprite.Sprite):
         
             
 
-    def health(self):
-        self.hp=100
-        hit=pygame.sprite.damage(self,self.game.damage,False)
-        if hit:
-            self.hp-=self.damage
+    
 
 
 
@@ -95,11 +104,41 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y=hits[0].rect.top - self.rect.height
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
-    
+
+class FIGHT:
+    def __init__(self):
+        
+        self.win=0
+        self.finished=False
+
     
         
         
-    
+class Fighter(pygame.sprite.Sprite):
+    def  __init__(self,game,x,y):
+        self.game=game
+        self._layer=FIGHTER_LAYER
+        self.groups=self.game.all_sprites_arena, self.game.fighter
+        pygame.sprite.Sprite.__init__(self,self.groups)
+
+        self.x=x*ARENASIZE
+        self.y=y*ARENASIZE
+        self.width=ARENASIZE
+        self.height=ARENASIZE
+
+        self.image=pygame.Surface([self.width,self.height])
+        self.image.fill(RED)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
+        self.hp=100
+    def health(self):
+       
+        hit=pygame.sprite.damage(self,self.game.damage,False)
+        if hit:
+            self.hp-=self.damage
+
 
 
                 
@@ -108,14 +147,14 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,game,x,y):
         self.game=game
-        self._layer=BLOCK_LAYER
-        self.groups=self.game.all_sprites, self.game.enemy
+        self._layer=ENEMY_LAYER
+        self.groups=self.game.all_sprites_arena, self.game.enemy
         pygame.sprite.Sprite.__init__(self,self.groups)
 
-        self.x=x*TILESIZE
-        self.y=y*TILESIZE
-        self.width=TILESIZE
-        self.height=TILESIZE
+        self.x=x*ARENASIZE
+        self.y=y*ARENASIZE
+        self.width=ARENASIZE
+        self.height=ARENASIZE
 
         self.image=pygame.Surface([self.width,self.height])
         self.image.fill(BLUE)
@@ -123,6 +162,12 @@ class Enemy(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
+        self.hp=100
+    def health(self):
+        self.hp=100
+        hit=pygame.sprite.damage(self,self.game.damage,False)
+        if hit:
+            self.hp-=self.damage
 
 
 class Block(pygame.sprite.Sprite): #creates the walls
@@ -151,13 +196,13 @@ class Door1(pygame.sprite.Sprite): #Creates the doors
     
         
         self._layer=DOOR_LAYER
-        self.groups=self.game.all_sprites,self.game.doors
+        self.groups=self.game.all_sprites,self.game.door1
         pygame.sprite.Sprite.__init__(self,self.groups)
 
         self.x=x*TILESIZE
         self.y=y*TILESIZE
         self.width=TILESIZE
-        self.height=TILESIZE
+        self.height=TILESIZE+1
 
         self.image=pygame.Surface([self.width,self.height])
         self.image.fill(BROWN)
@@ -169,17 +214,20 @@ class Door1(pygame.sprite.Sprite): #Creates the doors
 
         self.open=True
 class Door2(pygame.sprite.Sprite): #Creates the doors
+    
+    
     def __init__(self,game,x,y):
-        self.open=False
+        
         self.game=game
         self._layer=DOOR_LAYER
-        self.groups=self.game.all_sprites,self.game.doors
+        self.groups=self.game.all_sprites,self.game.door2
         pygame.sprite.Sprite.__init__(self,self.groups)
+        self.open=False
 
         self.x=x*TILESIZE
         self.y=y*TILESIZE
         self.width=TILESIZE
-        self.height=TILESIZE
+        self.height=TILESIZE+1
 
         self.image=pygame.Surface([self.width,self.height])
         self.image.fill(BLACK)
@@ -188,17 +236,18 @@ class Door2(pygame.sprite.Sprite): #Creates the doors
         self.rect.x=self.x
         self.rect.y=self.y
 class Door3(pygame.sprite.Sprite): #Creates the doors
+    
     def __init__(self,game,x,y):
-        self.open=False
+        
         self.game=game
         self._layer=DOOR_LAYER
-        self.groups=self.game.all_sprites,self.game.doors
+        self.groups=self.game.all_sprites,self.game.door3
         pygame.sprite.Sprite.__init__(self,self.groups)
-
+        self.open=False
         self.x=x*TILESIZE
         self.y=y*TILESIZE
         self.width=TILESIZE
-        self.height=TILESIZE
+        self.height=TILESIZE+1
 
         self.image=pygame.Surface([self.width,self.height])
         self.image.fill(RED)
