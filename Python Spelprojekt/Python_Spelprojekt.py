@@ -10,7 +10,7 @@ class Game:
         self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',20)
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
-        #self.font=pygame.font.Font('Arial',32)
+        
         self.running=True
         self.static=0
         self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
@@ -46,12 +46,13 @@ class Game:
         self.door3=pygame.sprite.LayeredUpdates()
         self.all_sprites=pygame.sprite.LayeredUpdates()
         self.Tilemap()
+
     def newArena(self):
         self.playing=True
-        #self.all_sprites.remove(self.screen)
+        
         self.fighter=pygame.sprite.LayeredUpdates()
         self.enemy=pygame.sprite.LayeredUpdates()
-        self.player=pygame.sprite.LayeredUpdates()
+        #self.player=pygame.sprite.LayeredUpdates()
         self.all_sprites_arena=pygame.sprite.LayeredUpdates()
         self.TilemapArena()
     
@@ -87,12 +88,17 @@ class Game:
         self.clock.tick(FPS) #how many time per second it updates
     
         pygame.display.update() #gives the updated screen
+
     def drawArena(self):
-        
-        
+
         self.screen.fill(BLACK)
         self.all_sprites_arena.draw(self.screen)
         self.clock.tick(FPS)
+        attack_button=Button(305,200,100,50,BLUE,WHITE,'Attack',32)
+        defend_button=Button(305,300,100,50,BLUE,WHITE,'Defend',32)
+        
+        self.screen.blit(attack_button.image,attack_button.rect) 
+        self.screen.blit(defend_button.image,defend_button.rect) 
         pygame.display.update()
 
     def statemanager(self,level):
@@ -127,12 +133,13 @@ class Game:
 
         #self.running=False #when the game is over
     def level1(self):
-    
+        
         
         self.events()
         self.drawArena()
-        self.update()
+        #self.update()
         self.updateArena()
+        
         
 
     def level2(self):
@@ -177,6 +184,7 @@ class Game:
             self.screen.blit(quit_button.image,quit_button.rect) 
             pygame.display.update()
 g=Game()
+
 g.intro_screen()
 g.new()
 
@@ -186,6 +194,7 @@ p=Player(g,4,6) #skapar objektet
 while g.running:
     
     g.statemanager(p.level)
+    
     
 
 pygame.quit()

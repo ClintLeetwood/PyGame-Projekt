@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.y=y*TILESIZE
         self.width=TILESIZE
         self.height=TILESIZE
-
+    
         self.x_change=0
         self.y_change=0
         self.facing='down'
@@ -24,30 +24,34 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
         self.rect.y=self.y
+        
         self.level="hallway"
+        self.win=0
+        self.static=0
+        
         
 
     def update(self):
+      
         
-            
-        
-        
-        f=FIGHT()    
         if pygame.sprite.spritecollide(self,self.game.door1,False):
-            
+            f=Fight()
             self.level="level1"
+            f.fight()
             
-        if self.level!="hallway" and pygame.mouse.get_pressed()[0]: #placeholder ska bli FIGHT.finished==True
-            self.rect.y=self.y+7
-           
-            self.level="hallway"     
-        if f.win==1:
+            if f.Win:
+                self.win=1
+                self.y=self.y+7
+                self.level="hallway"  
+        
+          
+        if self.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
             
                 self.level="level2"
             
                  
-        if f.win==2:
+        if self.win==2:
             if pygame.sprite.spritecollide(self,self.game.door3,False):
             
                 self.level="level3"
@@ -66,7 +70,8 @@ class Player(pygame.sprite.Sprite):
         self.y_change=0
         
             
-
+    
+        
     
 
 
@@ -105,11 +110,84 @@ class Player(pygame.sprite.Sprite):
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
 
-class FIGHT:
+    
+       
+            
+class Fight:
     def __init__(self):
-        
+        self.enemyhp=100
+        self.playerhp=100
+        self.computerchoice=1
+        self.playerchoice=0
+        self.fight=True
         self.win=0
-        self.finished=False
+    def computerchoice(self):
+        if self.enemyhp>0:
+            choice=random.choice(0,1)
+            if choice==0:
+                self.attack(self.playerhp,self.playerchoice)
+                self.computerchoice=0
+                return
+            else:
+                self.computerchoice=1
+                return 
+        else:
+            self.win()
+    def playerchoice(self):
+        while self.playerhp>0:
+            rectbut1=(305,200,100,50)
+            rectbut2=(305,300,100,50)
+            if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut1):
+                self.attack(self.enemyhp,self.computerchoice)
+                self.playerchoice=0
+                return 
+            elif pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut2):
+                self.playerchoice=1
+                return 
+        else:
+            self.lose()
+    def attack(self,receiver,recchoice):
+        chance=random.choice(0,100)
+        if chance<=20:
+            pass
+        elif chance>20:
+            if recchoice==1:
+                receiver-=10*self.defend()
+            else:
+                receiver-=10
+    def defend(self):
+        chance=random.choice(0,100)
+        if chance<=15:
+            return 0
+        elif chance>15 and chance<80:
+            return 0.5
+        else:
+            return 1
+
+    def Win(self):
+        if self.enemyhp<=0:
+            self.win+=1
+            
+            return True
+        return False
+    def lose(self):
+        if self.playerhp<=0:
+            
+            return True
+        return False
+    def fight(self):
+       
+        while self.enemyhp>0 and self.playerhp>0:
+            self.playerchoice()
+            self.computerchoice()
+        else:
+            return
+        
+        
+
+    
+
+
 
     
         
@@ -132,13 +210,8 @@ class Fighter(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
-        self.hp=100
-    def health(self):
-       
-        hit=pygame.sprite.damage(self,self.game.damage,False)
-        if hit:
-            self.hp-=self.damage
-
+        
+    
 
 
                 
@@ -162,12 +235,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
-        self.hp=100
-    def health(self):
-        self.hp=100
-        hit=pygame.sprite.damage(self,self.game.damage,False)
-        if hit:
-            self.hp-=self.damage
+        
 
 
 class Block(pygame.sprite.Sprite): #creates the walls
