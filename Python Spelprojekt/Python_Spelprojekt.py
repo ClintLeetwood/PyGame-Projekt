@@ -126,18 +126,13 @@ class Game:
             self.draw()
             self.update()
 
-       # print(self.state)
-            
-
-            
-
-        #self.running=False #when the game is over
+       
     def level1(self):
         
         
         self.events()
         self.drawArena()
-        #self.update()
+        self.update()
         self.updateArena()
         
         
@@ -194,7 +189,7 @@ p=Player(g,4,6) #skapar objektet
 while g.running:
     
     g.statemanager(p.level)
-    
+    print(p.level)
     
 
 pygame.quit()

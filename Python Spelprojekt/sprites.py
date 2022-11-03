@@ -35,14 +35,14 @@ class Player(pygame.sprite.Sprite):
       
         
         if pygame.sprite.spritecollide(self,self.game.door1,False):
-            f=Fight()
-            self.level="level1"
-            f.fight()
             
-            if f.Win:
-                self.win=1
-                self.y=self.y+7
-                self.level="hallway"  
+            self.level="level1"
+            self.check()
+            
+           # if f.Win:
+            #    self.win=1
+             #   self.y=self.y+7
+              #  self.level="hallway"  
         
           
         if self.win==1:
@@ -71,7 +71,19 @@ class Player(pygame.sprite.Sprite):
         
             
     
-        
+    def check(self):
+        if self.static==0:
+            self.static+=1
+            f=Fight()
+            f.fight()
+            
+        else:
+            if f.Win:
+                self.win=1
+                self.y=self.y+7
+                self.level="hallway"
+            else:
+                pass
     
 
 
@@ -117,19 +129,19 @@ class Fight:
     def __init__(self):
         self.enemyhp=100
         self.playerhp=100
-        self.computerchoice=1
-        self.playerchoice=0
-        self.fight=True
+        self.computer_choice=1
+        self.player_choice=0
+        
         self.win=0
     def computerchoice(self):
         if self.enemyhp>0:
             choice=random.choice(0,1)
             if choice==0:
-                self.attack(self.playerhp,self.playerchoice)
-                self.computerchoice=0
+                self.attack(self.playerhp,self.player_choice)
+                self.computer_choice=0
                 return
             else:
-                self.computerchoice=1
+                self.computer_choice=1
                 return 
         else:
             self.win()
@@ -138,11 +150,11 @@ class Fight:
             rectbut1=(305,200,100,50)
             rectbut2=(305,300,100,50)
             if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut1):
-                self.attack(self.enemyhp,self.computerchoice)
-                self.playerchoice=0
+                self.attack(self.enemyhp,self.computer_choice)
+                self.player_choice=0
                 return 
             elif pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut2):
-                self.playerchoice=1
+                self.player_choice=1
                 return 
         else:
             self.lose()
@@ -153,8 +165,10 @@ class Fight:
         elif chance>20:
             if recchoice==1:
                 receiver-=10*self.defend()
+                return
             else:
                 receiver-=10
+                return
     def defend(self):
         chance=random.choice(0,100)
         if chance<=15:
