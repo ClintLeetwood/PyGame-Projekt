@@ -189,7 +189,7 @@ p=Player(g,4,6) #skapar objektet
 while g.running:
     
     g.statemanager(p.level)
-    print(p.level)
+    
     
 
 pygame.quit()

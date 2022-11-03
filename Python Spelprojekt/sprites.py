@@ -1,4 +1,5 @@
 #from logging import _Level
+from operator import truediv
 import pygame
 from config import *
 import math
@@ -28,6 +29,8 @@ class Player(pygame.sprite.Sprite):
         self.level="hallway"
         self.win=0
         self.static=0
+        self.f=Fight()
+        
         
         
 
@@ -37,12 +40,15 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self,self.game.door1,False):
             
             self.level="level1"
+            
             self.check()
             
-           # if f.Win:
-            #    self.win=1
-             #   self.y=self.y+7
-              #  self.level="hallway"  
+            if self.f==0:
+            
+                self.rect.y=self.y+7
+
+                self.level="hallway" 
+                self.f=Fight() 
         
           
         if self.win==1:
@@ -72,18 +78,14 @@ class Player(pygame.sprite.Sprite):
             
     
     def check(self):
-        if self.static==0:
-            self.static+=1
-            f=Fight()
-            f.fight()
-            
+        
+        if self.f.status()==False:
+            self.f=0
+            print("1")
         else:
-            if f.Win:
-                self.win=1
-                self.y=self.y+7
-                self.level="hallway"
-            else:
-                pass
+            self.f.fight()
+            
+        
     
 
 
@@ -129,48 +131,69 @@ class Fight:
     def __init__(self):
         self.enemyhp=100
         self.playerhp=100
-        self.computer_choice=1
+        self.computer_choice=0
         self.player_choice=0
         
         self.win=0
     def computerchoice(self):
         if self.enemyhp>0:
-            choice=random.choice(0,1)
+            choice=random.choice(range(0,1))
             if choice==0:
-                self.attack(self.playerhp,self.player_choice)
                 self.computer_choice=0
+                self.attack("enemy")
+                
                 return
             else:
                 self.computer_choice=1
                 return 
         else:
-            self.win()
+            self.Win()
     def playerchoice(self):
-        while self.playerhp>0:
+        if self.playerhp>0:
             rectbut1=(305,200,100,50)
             rectbut2=(305,300,100,50)
             if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut1):
-                self.attack(self.enemyhp,self.computer_choice)
                 self.player_choice=0
-                return 
+                self.attack("player")
+                
+                return True
             elif pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut2):
                 self.player_choice=1
-                return 
+            else:
+                return False
+                  
         else:
             self.lose()
-    def attack(self,receiver,recchoice):
-        chance=random.choice(0,100)
-        if chance<=20:
-            pass
-        elif chance>20:
-            if recchoice==1:
-                receiver-=10*self.defend()
-                return
-            else:
-                receiver-=10
-                return
+    def attack(self,attacker):
+        chance=random.choice(range(0,100))
+        if attacker=="player":
+            if chance<=20:
+                pass
+            elif chance>20:
+                if self.computer_choice==1:
+                    self.enemyhp-=10*self.defend()
+            
+                    
+                else:
+                    self.enemyhp-=10
+                
+                    
+        elif attacker=="enemy":
+            if chance<=20:
+                pass
+            elif chance>20:
+                if self.player_choice==1:
+                    self.playerhp-=10*self.defend()
+            
+                    
+                else:
+                    self.playerhp-=10
+                
+                    
+        
+        
     def defend(self):
-        chance=random.choice(0,100)
+        chance=random.choice(range(0,100))
         if chance<=15:
             return 0
         elif chance>15 and chance<80:
@@ -191,11 +214,16 @@ class Fight:
         return False
     def fight(self):
        
-        while self.enemyhp>0 and self.playerhp>0:
-            self.playerchoice()
+        
+        if self.playerchoice():
+        
             self.computerchoice()
-        else:
-            return
+            print(self.enemyhp, self.playerhp)
+        
+            
+
+    def status(self):
+        return not(self.Win() or  self.lose())
         
         
 
