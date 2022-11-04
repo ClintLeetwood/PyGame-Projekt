@@ -29,38 +29,65 @@ class Player(pygame.sprite.Sprite):
         self.level="hallway"
         self.win=0
         self.static=0
-        self.f=Fight()
+        self.f=Fight(70,100)
         
         
         
 
     def update(self):
       
-        
-        if pygame.sprite.spritecollide(self,self.game.door1,False):
-            
-            self.level="level1"
-            
-            self.check()
-            
-            if self.f==0:
-            
-                self.rect.y=self.y+7
+        if self.win==0:
+            if pygame.sprite.spritecollide(self,self.game.door1,False):
+                
+                self.level="level1"
+                
+                self.check()
+                
+                if self.f==0:
+                
+                    self.rect.y=self.y+7
 
-                self.level="hallway" 
-                self.f=Fight() 
+                    self.level="hallway" 
+                    if self.win==1:
+                        self.f=Fight(100,100) 
+                    else:
+                        self.f=Fight(70,100)
         
           
         if self.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
             
                 self.level="level2"
+                self.check()
+            
+                if self.f==0:
+            
+                    self.rect.y=self.y+7
+
+                    self.level="hallway" 
+                    if self.win==2:
+                        self.f=Fight(120,100) 
+                    else:
+                        self.f=Fight(100,100)
+        
             
                  
         if self.win==2:
             if pygame.sprite.spritecollide(self,self.game.door3,False):
             
                 self.level="level3"
+                self.check()
+            
+                if self.f==0 and self.win==2:
+            
+                    
+                    self.rect.y=self.y+7
+                    self.level="hallway" 
+                    self.f=Fight(120,100) 
+                elif self.f==0 and self.win==3:
+                    
+                    self.level="you_win"
+        
         
             
                  
@@ -80,8 +107,11 @@ class Player(pygame.sprite.Sprite):
     def check(self):
         
         if self.f.status()==False:
+            if self.f.Win():
+                self.win+=1
+
             self.f=0
-            print("1")
+            print(self.win)
         else:
             self.f.fight()
             
@@ -128,9 +158,9 @@ class Player(pygame.sprite.Sprite):
        
             
 class Fight:
-    def __init__(self):
-        self.enemyhp=100
-        self.playerhp=100
+    def __init__(self,enemyhp,playerhp):
+        self.enemyhp=enemyhp
+        self.playerhp=playerhp
         self.computer_choice=0
         self.player_choice=0
         
@@ -152,15 +182,18 @@ class Fight:
         if self.playerhp>0:
             rectbut1=(305,200,100,50)
             rectbut2=(305,300,100,50)
-            if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut1):
-                self.player_choice=0
-                self.attack("player")
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut1):
+
+            
+                    self.player_choice=0
+                    self.attack("player")
                 
-                return True
-            elif pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos(rectbut2):
-                self.player_choice=1
-            else:
-                return False
+                    return True
+                elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut2):
+                    self.player_choice=1
+                else:
+                    return False
                   
         else:
             self.lose()
@@ -218,7 +251,7 @@ class Fight:
         if self.playerchoice():
         
             self.computerchoice()
-            print(self.enemyhp, self.playerhp)
+            print("enemy ",self.enemyhp, "player ",self.playerhp)
         
             
 

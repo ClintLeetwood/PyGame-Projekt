@@ -116,12 +116,14 @@ class Game:
         if level=="level3":
             self.check()
             self.level3()
+        if level=="you_win":
+            self.you_win()
 
             
     def hallway(self):
         #game loop
         #self.new()
-        
+            self.static=0
             self.events()
             self.draw()
             self.update()
@@ -140,16 +142,23 @@ class Game:
     def level2(self):
         self.events()
         self.drawArena()
+        self.update()
         self.updateArena()
     def level3(self):
         self.events()
         self.drawArena()
+        self.update()
         self.updateArena()
             
         
 
     def you_win(self):
-        pass
+        self.events()
+        title=self.font.render('YOU WIN!!',True, WHITE)
+        title_rect=title.get_rect(x=220,y=240)
+        self.screen.blit(self.intro_background,(0,0))
+        self.screen.blit(title,title_rect)
+        pygame.display.update()
 
     def intro_screen(self):
         intro=True
