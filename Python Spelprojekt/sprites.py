@@ -62,7 +62,11 @@ class Player(pygame.sprite.Sprite):
                         self.f=Fight(100,100) 
                     else:
                         self.f=Fight(70,100)
-        
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
           
         if self.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
@@ -79,7 +83,11 @@ class Player(pygame.sprite.Sprite):
                         self.f=Fight(120,100) 
                     else:
                         self.f=Fight(100,100)
-        
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
             
                  
         if self.win==2:
@@ -96,7 +104,11 @@ class Player(pygame.sprite.Sprite):
                 elif self.f==0 and self.win==3:
                     self.f=Fight(120,100)
                     self.level="you_win"
-        
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
         
             
                  
@@ -235,8 +247,8 @@ class Fight:
             self.Win()
     def playerchoice(self):
         if self.playerhp>0:
-            rectbut1=pygame.Rect(360,290,100,50)
-            rectbut2=pygame.Rect(360,350,100,50)
+            rectbut1=pygame.Rect(360,290,128,50)
+            rectbut2=pygame.Rect(360,350,128,50)
             for event in pygame.event.get():
                 pos=pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONDOWN  :
@@ -355,9 +367,8 @@ class Fighter(pygame.sprite.Sprite):
         self.y=y*ARENASIZE
         self.width=ARENASIZE
         self.height=ARENASIZE
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(RED)
+        self.image=self.game.fighter_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
@@ -381,7 +392,7 @@ class Enemy(pygame.sprite.Sprite):
         self.width=ARENASIZE
         self.height=ARENASIZE
         
-        self.image=self.game.enemy_3_spritesheet.get_sprite(0,0,self.width,self.height)
+        self.image=self.game.enemy_spritesheet.get_sprite(0,0,self.width,self.height)
         
 
         self.rect=self.image.get_rect()
@@ -477,7 +488,7 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
         self.rect.y=self.y
 
 class Button:
-    def __init__(self,x,y,width,height,fg,bg,content,fontsize):
+    def __init__(self,x,y,width,height,fg,content,fontsize):
         self.content=content
         self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',fontsize)
         self.x=x
@@ -485,10 +496,11 @@ class Button:
         self.height=height
         self.width=width
         self.fg=fg
-        self.bg=bg
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(self.bg)
+        
+        self.button_spritesheet=Spritesheet('Python Spelprojekt/img/button.png')
+        self.image=self.button_spritesheet.get_sprite(0,9,self.width,self.height)
+        
+        
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y

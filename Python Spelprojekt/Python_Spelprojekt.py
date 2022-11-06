@@ -14,9 +14,10 @@ class Game:
         self.running=True
         self.static=0
         self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
-        self.enemy_3_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
+        self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
         self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
         self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/floor_base.png')
+        self.fighter_spritesheet=Spritesheet('Python Spelprojekt/img/big_character.png')
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
@@ -105,8 +106,8 @@ class Game:
         self.screen.fill(BLACK)
         self.all_sprites_arena.draw(self.screen)
         self.clock.tick(FPS)
-        attack_button=Button(360,290,100,50,BLUE,WHITE,'Attack',28)
-        defend_button=Button(360,350,100,50,BLUE,WHITE,'Defend',28)
+        attack_button=Button(360,290,128,50,WHITE,'Attack',28)
+        defend_button=Button(360,350,128,50,WHITE,'Defend',28)
         
         enemy='Enemy HP: '+str(enemyhp)
         player='Player HP: '+str(playerhp)
@@ -127,7 +128,7 @@ class Game:
         if level=="intro":
             self.intro_screen()
         if level=="hallway":
-            self.hallway(wins)
+            self.hallway(wins)  #skriver antalet wins
         if level=="level1" :
             self.check()
             self.level1(enemyhp,playerhp)
@@ -143,7 +144,7 @@ class Game:
             
     def hallway(self,wins):
         #game loop
-        #self.new()
+        
         self.static=0
         self.events()
         self.draw(wins)
@@ -165,6 +166,7 @@ class Game:
         self.drawArena(enemyhp,playerhp)
         self.update()
         self.updateArena()
+
     def level3(self,enemyhp,playerhp):
         self.events()
         self.drawArena(enemyhp,playerhp)
@@ -187,8 +189,8 @@ class Game:
         title=self.font.render('First term Simulator',True, WHITE)
         title_rect=title.get_rect(x=220,y=30)
         
-        play_button=Button(270,200,100,50,BLUE,WHITE,'Play',32)
-        quit_button=Button(270,300,100,50,BLUE,WHITE,'QUIT',32)
+        play_button=Button(270,200,128,50,WHITE,'Play',32)
+        quit_button=Button(270,300,128,50,WHITE,'QUIT',32)
         while intro:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT: #checks if window is closed
@@ -214,7 +216,7 @@ g.intro_screen()
 g.new()
 
 
-p=Player(g,4,6) #skapar objektet
+p=Player(g,4,6) #skapar objektet player for att dela dess info med game class
 
 while g.running:
     
