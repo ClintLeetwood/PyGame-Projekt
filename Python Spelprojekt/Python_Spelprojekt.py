@@ -85,15 +85,20 @@ class Game:
             pass
         
 
-    def draw(self):
+    def draw(self,wins):
     
         self.screen.fill(BLACK) #creates the background for the winodw
         self.all_sprites.draw(self.screen) #puts everything on the window
         self.clock.tick(FPS) #how many time per second it updates
-    
+
+        won=str(wins)+' out of 3 battles won'
+        winning=self.font.render(won,True, WHITE)
+        winning_rect=winning.get_rect(x=5,y=5)
+
+        self.screen.blit(winning,winning_rect)
         pygame.display.update() #gives the updated screen
 
-    def drawArena(self):
+    def drawArena(self,enemyhp,playerhp):
 
         self.screen.fill(BLACK)
         self.all_sprites_arena.draw(self.screen)
@@ -101,56 +106,66 @@ class Game:
         attack_button=Button(360,290,100,50,BLUE,WHITE,'Attack',28)
         defend_button=Button(360,350,100,50,BLUE,WHITE,'Defend',28)
         
+        enemy='Enemy HP: '+str(enemyhp)
+        player='Player HP: '+str(playerhp)
+        enemy_hp=self.font.render(enemy,True, WHITE)
+        enemy_hp_rect=enemy_hp.get_rect(x=350,y=30)
+        player_hp=self.font.render(player,True, WHITE)
+        player_hp_rect=player_hp.get_rect(x=20,y=30)
+
         self.screen.blit(attack_button.image,attack_button.rect) 
-        self.screen.blit(defend_button.image,defend_button.rect) 
+        self.screen.blit(defend_button.image,defend_button.rect)
+        self.screen.blit(enemy_hp,enemy_hp_rect)
+        self.screen.blit(player_hp,player_hp_rect) 
         pygame.display.update()
 
-    def statemanager(self,level):
+
+    def statemanager(self,level,enemyhp,playerhp,wins):
         
         if level=="intro":
             self.intro_screen()
         if level=="hallway":
-            self.hallway()
+            self.hallway(wins)
         if level=="level1" :
             self.check()
-            self.level1()
+            self.level1(enemyhp,playerhp)
         if level=="level2":
             self.check()
-            self.level2()
+            self.level2(enemyhp,playerhp)
         if level=="level3":
             self.check()
-            self.level3()
+            self.level3(enemyhp,playerhp)
         if level=="you_win":
             self.you_win()
 
             
-    def hallway(self):
+    def hallway(self,wins):
         #game loop
         #self.new()
-            self.static=0
-            self.events()
-            self.draw()
-            self.update()
+        self.static=0
+        self.events()
+        self.draw(wins)
+        self.update()
 
        
-    def level1(self):
+    def level1(self,enemyhp,playerhp):
         
         
         self.events()
-        self.drawArena()
+        self.drawArena(enemyhp,playerhp)
         self.update()
         self.updateArena()
         
         
 
-    def level2(self):
+    def level2(self,enemyhp,playerhp):
         self.events()
-        self.drawArena()
+        self.drawArena(enemyhp,playerhp)
         self.update()
         self.updateArena()
-    def level3(self):
+    def level3(self,enemyhp,playerhp):
         self.events()
-        self.drawArena()
+        self.drawArena(enemyhp,playerhp)
         self.update()
         self.updateArena()
             
@@ -159,7 +174,7 @@ class Game:
     def you_win(self):
         self.events()
         title=self.font.render('YOU WIN!!',True, WHITE)
-        title_rect=title.get_rect(x=220,y=240)
+        title_rect=title.get_rect(x=250,y=232)
         self.screen.blit(self.intro_background,(0,0))
         self.screen.blit(title,title_rect)
         pygame.display.update()
@@ -201,7 +216,7 @@ p=Player(g,4,6) #skapar objektet
 
 while g.running:
     
-    g.statemanager(p.level)
+    g.statemanager(p.level,p.f.enemyhp,p.f.playerhp,p.win)
     
     
 
