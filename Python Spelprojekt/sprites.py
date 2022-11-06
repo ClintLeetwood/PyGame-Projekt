@@ -28,9 +28,9 @@ class Player(pygame.sprite.Sprite):
         self.x_change=0
         self.y_change=0
         self.facing='down'
-
-        self.image=pygame.Surface([self.width,self.height])#right now the player is sqaure fill in pic later
-        self.image.fill(RED)
+        self.image=self.game.character_spritesheet.get_sprite(0,0,self.width,self.height)
+        #self.image=pygame.Surface([self.width,self.height])#right now the player is sqaure fill in pic later
+        #self.image.fill(RED)
 
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
