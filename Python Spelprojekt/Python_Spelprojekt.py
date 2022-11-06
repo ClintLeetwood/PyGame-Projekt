@@ -47,6 +47,7 @@ class Game:
         self.all_sprites=pygame.sprite.LayeredUpdates()
         self.Tilemap()
 
+
     def newArena(self):
         self.playing=True
         
@@ -55,6 +56,7 @@ class Game:
         #self.player=pygame.sprite.LayeredUpdates()
         self.all_sprites_arena=pygame.sprite.LayeredUpdates()
         self.TilemapArena()
+
     
     
     def events(self):
