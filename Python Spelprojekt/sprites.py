@@ -4,6 +4,16 @@ import pygame
 from config import *
 import math
 import random
+class Spritesheet:
+    def __init__(self,file):
+        self.sheet=pygame.image.load(file).convert()
+
+    def get_sprite(self,x,y,width,height):
+        sprite=pygame.Surface([width,height])
+        sprite.blit(self.sheet,(0,0),(x,y,width,height))
+        sprite.set_colorkey(BLACK)
+        return sprite
+
 class Player(pygame.sprite.Sprite):
     def __init__(self,game,x,y): #x,y gives the location of the player 
         self.game=game
@@ -180,18 +190,24 @@ class Fight:
             self.Win()
     def playerchoice(self):
         if self.playerhp>0:
-            rectbut1=(305,200,100,50)
-            rectbut2=(305,300,100,50)
+            rectbut1=pygame.Rect(360,290,100,50)
+            rectbut2=pygame.Rect(360,350,100,50)
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut1):
-
+                pos=pygame.mouse.get_pos()
+                if event.type == pygame.MOUSEBUTTONDOWN  :
+                    if rectbut1.collidepoint( pos):
+                        print("1")
             
-                    self.player_choice=0
-                    self.attack("player")
+                        self.player_choice=0
+                        self.attack("player")
                 
-                    return True
-                elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut2):
-                    self.player_choice=1
+                        return True
+                    elif rectbut2.collidepoint(pos):
+                        self.player_choice=1
+                        print("2")
+                        return True
+                    else:
+                        return False
                 else:
                     return False
                   
@@ -303,9 +319,10 @@ class Enemy(pygame.sprite.Sprite):
         self.y=y*ARENASIZE
         self.width=ARENASIZE
         self.height=ARENASIZE
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLUE)
+        #self.image=pygame.Surface([self.width,self.height])
+        #self.image.fill(BLUE)
+        self.image=self.game.enemy_3_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x

@@ -14,6 +14,7 @@ class Game:
         self.running=True
         self.static=0
         self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
+        self.enemy_3_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
@@ -96,8 +97,8 @@ class Game:
         self.screen.fill(BLACK)
         self.all_sprites_arena.draw(self.screen)
         self.clock.tick(FPS)
-        attack_button=Button(305,200,100,50,BLUE,WHITE,'Attack',32)
-        defend_button=Button(305,300,100,50,BLUE,WHITE,'Defend',32)
+        attack_button=Button(360,290,100,50,BLUE,WHITE,'Attack',28)
+        defend_button=Button(360,350,100,50,BLUE,WHITE,'Defend',28)
         
         self.screen.blit(attack_button.image,attack_button.rect) 
         self.screen.blit(defend_button.image,defend_button.rect) 
