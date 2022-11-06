@@ -90,12 +90,11 @@ class Player(pygame.sprite.Sprite):
             
                 if self.f==0 and self.win==2:
             
-                    
                     self.rect.y=self.y+7
                     self.level="hallway" 
                     self.f=Fight(120,100) 
                 elif self.f==0 and self.win==3:
-                    
+                    self.f=Fight(120,100)
                     self.level="you_win"
         
         
@@ -121,7 +120,7 @@ class Player(pygame.sprite.Sprite):
                 self.win+=1
 
             self.f=0
-            print(self.win)
+            
         else:
             self.f.fight()
             
@@ -196,7 +195,7 @@ class Fight:
                 pos=pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONDOWN  :
                     if rectbut1.collidepoint( pos):
-                        print("1")
+                        
             
                         self.player_choice=0
                         self.attack("player")
@@ -204,7 +203,7 @@ class Fight:
                         return True
                     elif rectbut2.collidepoint(pos):
                         self.player_choice=1
-                        print("2")
+                        
                         return True
                     else:
                         return False
@@ -267,7 +266,7 @@ class Fight:
         if self.playerchoice():
         
             self.computerchoice()
-            print("enemy ",self.enemyhp, "player ",self.playerhp)
+            
         
             
 
