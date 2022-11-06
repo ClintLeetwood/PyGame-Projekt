@@ -15,10 +15,12 @@ class Game:
         self.static=0
         self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
         self.enemy_3_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
-        self.character_spritesheet=Spritesheet('Python Spelprojekt/img/character_down.png')
+        self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
+        self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/floor_base.png')
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
+                Ground(self,j,i)
                 if column=="B":
                     Block(self,j,i)
                 
