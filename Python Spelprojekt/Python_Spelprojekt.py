@@ -1,4 +1,4 @@
-from ast import Pass
+
 import pygame
 from sprites import *
 from config import *
@@ -17,7 +17,7 @@ class Game:
         self.win_bg=pygame.image.load('Python Spelprojekt/img/Win.jpg')
         self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
         self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
-        self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/floor_base.png')
+        self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/Floor.png')
         self.fighter_spritesheet=Spritesheet('Python Spelprojekt/img/big_character.png')
         self.wall_spritesheet=Spritesheet('Python Spelprojekt/img/Wall.png')
         self.door_spritesheet=Spritesheet('Python Spelprojekt/img/Door.png')

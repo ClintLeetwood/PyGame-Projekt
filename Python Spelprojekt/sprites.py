@@ -345,7 +345,7 @@ class Ground(pygame.sprite.Sprite):
         self.height=TILESIZE
         #self.image=pygame.Surface([self.width,self.height])
         #self.image.fill(RED)
-        self.image=self.game.terrain_spritesheet.get_sprite(71,1,self.width,self.height)
+        self.image=self.game.terrain_spritesheet.get_sprite(22,34,self.width,self.height)
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
