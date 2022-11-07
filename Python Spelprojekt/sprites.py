@@ -176,20 +176,20 @@ class Player(pygame.sprite.Sprite):
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
     def animate(self):
-        down_animations = [self.game.character_spritesheet.get_sprite(4, -1, self.width, self.height),
-                        self.game.character_spritesheet.get_sprite(36, -1, self.width, self.height),
+        down_animations = [self.game.character_spritesheet.get_sprite(36, -1, self.width, self.height),
+                            self.game.character_spritesheet.get_sprite(4, -1, self.width, self.height),
                         self.game.character_spritesheet.get_sprite(68, -1, self.width, self.height)]
 
-        left_animations = [self.game.character_spritesheet.get_sprite(3, 31, self.width, self.height),
-                        self.game.character_spritesheet.get_sprite(36, 31, self.width, self.height),
+        left_animations = [self.game.character_spritesheet.get_sprite(36, 31, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(3, 31, self.width, self.height),
                         self.game.character_spritesheet.get_sprite(68, 31, self.width, self.height)]
 
-        right_animations = [self.game.character_spritesheet.get_sprite(6, 63, self.width, self.height),
-                        self.game.character_spritesheet.get_sprite(38, 63, self.width, self.height),
+        right_animations = [ self.game.character_spritesheet.get_sprite(38, 63, self.width, self.height),
+                            self.game.character_spritesheet.get_sprite(6, 63, self.width, self.height),
                         self.game.character_spritesheet.get_sprite(70, 63, self.width, self.height)]
 
-        up_animations = [self.game.character_spritesheet.get_sprite(6, 95, self.width, self.height),
-                        self.game.character_spritesheet.get_sprite(38, 95, self.width, self.height),
+        up_animations = [self.game.character_spritesheet.get_sprite(38, 95, self.width, self.height),
+            self.game.character_spritesheet.get_sprite(6, 95, self.width, self.height),
                         self.game.character_spritesheet.get_sprite(70, 95, self.width, self.height)]
         if self.facing=="down":
             if self.y_change==0:

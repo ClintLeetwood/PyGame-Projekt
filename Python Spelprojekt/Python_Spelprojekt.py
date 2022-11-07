@@ -7,13 +7,13 @@ class Game:
     
     def __init__(self):
         pygame.init()
-        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',20)
+        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',38)
         self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
         self.clock=pygame.time.Clock()
         
         self.running=True
         self.static=0
-        self.intro_background=pygame.Surface((WIN_WIDTH,WIN_HEIGHT))
+        self.intro_background=pygame.image.load('Python Spelprojekt/img/intro_backgr.jpg')
         self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
         self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
         self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/floor_base.png')
@@ -130,13 +130,19 @@ class Game:
         if level=="hallway":
             self.hallway(wins)  #skriver antalet wins
         if level=="level1" :
+            self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Niklas.png')
             self.check()
             self.level1(enemyhp,playerhp)
+            
         if level=="level2":
+            self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Henrik.png')
             self.check()
+            
             self.level2(enemyhp,playerhp)
         if level=="level3":
+            self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
             self.check()
+            
             self.level3(enemyhp,playerhp)
         if level=="you_win":
             self.you_win()
@@ -186,8 +192,8 @@ class Game:
     def intro_screen(self):
         intro=True
         self.running=True
-        title=self.font.render('First term Simulator',True, WHITE)
-        title_rect=title.get_rect(x=220,y=30)
+        title=self.font.render('First term Simulator',True, YGR)
+        title_rect=title.get_rect(x=150,y=30)
         
         play_button=Button(270,200,128,50,WHITE,'Play',32)
         quit_button=Button(270,300,128,50,WHITE,'QUIT',32)
@@ -205,7 +211,7 @@ class Game:
                 intro=False
                 self.running=False
 
-            self.screen.blit(self.intro_background,(0,0))
+            self.screen.blit(self.intro_background,(-300,-50))
             self.screen.blit(title,title_rect)
             self.screen.blit(play_button.image,play_button.rect) 
             self.screen.blit(quit_button.image,quit_button.rect) 
