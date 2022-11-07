@@ -343,7 +343,8 @@ class Ground(pygame.sprite.Sprite):
         self.y=y*TILESIZE
         self.width=TILESIZE
         self.height=TILESIZE
-
+        #self.image=pygame.Surface([self.width,self.height])
+        #self.image.fill(RED)
         self.image=self.game.terrain_spritesheet.get_sprite(71,1,self.width,self.height)
 
         self.rect=self.image.get_rect()
@@ -414,9 +415,7 @@ class Block(pygame.sprite.Sprite): #creates the walls
         self.width=TILESIZE
         self.height=TILESIZE
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLUE)
-
+        self.image=self.game.wall_spritesheet.get_sprite(0,0,self.width,self.height)
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
@@ -435,8 +434,7 @@ class Door1(pygame.sprite.Sprite): #Creates the doors
         self.width=TILESIZE
         self.height=TILESIZE+1
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BROWN)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
@@ -460,8 +458,7 @@ class Door2(pygame.sprite.Sprite): #Creates the doors
         self.width=TILESIZE
         self.height=TILESIZE+1
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLACK)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
@@ -479,9 +476,8 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
         self.y=y*TILESIZE
         self.width=TILESIZE
         self.height=TILESIZE+1
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(RED)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x

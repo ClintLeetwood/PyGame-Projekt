@@ -14,10 +14,14 @@ class Game:
         self.running=True
         self.static=0
         self.intro_background=pygame.image.load('Python Spelprojekt/img/intro_backgr.jpg')
+        self.win_bg=pygame.image.load('Python Spelprojekt/img/Win.jpg')
         self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
         self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
         self.terrain_spritesheet=Spritesheet('Python Spelprojekt/img/floor_base.png')
         self.fighter_spritesheet=Spritesheet('Python Spelprojekt/img/big_character.png')
+        self.wall_spritesheet=Spritesheet('Python Spelprojekt/img/Wall.png')
+        self.door_spritesheet=Spritesheet('Python Spelprojekt/img/Door.png')
+        self.arena_spritesheet=pygame.image.load('Python Spelprojekt/img/Arena.png')
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
@@ -102,8 +106,8 @@ class Game:
         pygame.display.update() #gives the updated screen
 
     def drawArena(self,enemyhp,playerhp):
-
-        self.screen.fill(BLACK)
+        self.screen.blit(self.arena_spritesheet,(0,0))
+        
         self.all_sprites_arena.draw(self.screen)
         self.clock.tick(FPS)
         attack_button=Button(360,290,128,50,WHITE,'Attack',28)
@@ -112,9 +116,9 @@ class Game:
         enemy='Enemy HP: '+str(enemyhp)
         player='Player HP: '+str(playerhp)
         enemy_hp=self.font.render(enemy,True, WHITE)
-        enemy_hp_rect=enemy_hp.get_rect(x=350,y=30)
+        enemy_hp_rect=enemy_hp.get_rect(x=350,y=10)
         player_hp=self.font.render(player,True, WHITE)
-        player_hp_rect=player_hp.get_rect(x=20,y=30)
+        player_hp_rect=player_hp.get_rect(x=20,y=10)
 
         self.screen.blit(attack_button.image,attack_button.rect) 
         self.screen.blit(defend_button.image,defend_button.rect)
@@ -183,9 +187,10 @@ class Game:
 
     def you_win(self):
         self.events()
-        title=self.font.render('YOU WIN!!',True, WHITE)
-        title_rect=title.get_rect(x=250,y=232)
-        self.screen.blit(self.intro_background,(0,0))
+        
+        title=self.font.render('YOU WIN!!',True, BLACK)
+        title_rect=title.get_rect(x=250,y=225)
+        self.screen.blit(self.win_bg,(-30,0))
         self.screen.blit(title,title_rect)
         pygame.display.update()
 
