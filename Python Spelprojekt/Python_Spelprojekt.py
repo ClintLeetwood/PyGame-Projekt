@@ -7,13 +7,14 @@ class Game:
     
     def __init__(self):
         pygame.init()
-        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',38)
-        self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
+        self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',38)  #the standard font and size
+        self.screen=pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))    #uses constants from config.py
         self.clock=pygame.time.Clock()
         
         self.running=True
-        self.static=0
-        self.intro_background=pygame.image.load('Python Spelprojekt/img/intro_backgr.jpg')
+        self.static=0       #a variable to keep count if a new arena has been made, used in the check function
+
+        self.intro_background=pygame.image.load('Python Spelprojekt/img/intro_backgr.jpg')  #all images, for sprites refering to spritesheet class
         self.win_bg=pygame.image.load('Python Spelprojekt/img/Win.jpg')
         self.enemy_spritesheet=Spritesheet('Python Spelprojekt/img/Pascal.png')
         self.character_spritesheet=Spritesheet('Python Spelprojekt/img/sprites_base.png')
@@ -22,19 +23,20 @@ class Game:
         self.wall_spritesheet=Spritesheet('Python Spelprojekt/img/Wall.png')
         self.door_spritesheet=Spritesheet('Python Spelprojekt/img/Door.png')
         self.arena_spritesheet=pygame.image.load('Python Spelprojekt/img/Arena.png')
+
     def Tilemap(self): #follows the map in config
         for i, row in enumerate(tilemap): #y position
             for j, column in enumerate(row): #x position
                 Ground(self,j,i)
                 if column=="B":
-                    Block(self,j,i)
-                
+                    Block(self,j,i) 
                 if column=="1":
                     Door1(self,j,i)
                 if column=="2":
                     Door2(self,j,i)
                 if column=="3":
                     Door3(self,j,i)
+
     def TilemapArena(self):
         for i, row in enumerate(tilemap_arena):
             for j, column in enumerate(row):
@@ -79,10 +81,11 @@ class Game:
 
     def update(self): #moves the image
         self.all_sprites.update()
+
     def updateArena(self):
         self.all_sprites_arena.update()
         
-    def check(self):
+    def check(self):    #checks if the new arena has been made once already or not, reset which a new level
         if self.static==0:
             self.static+=1
             
@@ -98,7 +101,7 @@ class Game:
         self.all_sprites.draw(self.screen) #puts everything on the window
         self.clock.tick(FPS) #how many time per second it updates
 
-        won=str(wins)+' out of 3 battles won'
+        won=str(wins)+' out of 3 battles won'   #keeps score of wins imported from player class into stagemanager and given to the hallway level
         winning=self.font.render(won,True, WHITE)
         winning_rect=winning.get_rect(x=5,y=5)
 
@@ -113,8 +116,8 @@ class Game:
         attack_button=Button(360,290,128,50,WHITE,'Attack',28)
         defend_button=Button(360,350,128,50,WHITE,'Defend',28)
         
-        enemy='Enemy HP: '+str(enemyhp)
-        player='Player HP: '+str(playerhp)
+        enemy='Enemy HP: '+str(enemyhp)             #keeps score of the hp levels of the player and enemy while playing info is imported
+        player='Player HP: '+str(playerhp)              #from the player class fed into the stagemanager and given to each level
         enemy_hp=self.font.render(enemy,True, WHITE)
         enemy_hp_rect=enemy_hp.get_rect(x=350,y=10)
         player_hp=self.font.render(player,True, WHITE)
@@ -128,7 +131,7 @@ class Game:
 
 
     def statemanager(self,level,enemyhp,playerhp,wins):
-        
+        #The Check functions Draws the new Arena and changes the previous sprite, such as the teachers
         if level=="intro":
             self.intro_screen()
         if level=="hallway":
@@ -168,8 +171,7 @@ class Game:
         self.drawArena(enemyhp,playerhp)
         self.update()
         self.updateArena()
-        
-        
+    
 
     def level2(self,enemyhp,playerhp):
         self.events()
@@ -221,17 +223,15 @@ class Game:
             self.screen.blit(play_button.image,play_button.rect) 
             self.screen.blit(quit_button.image,quit_button.rect) 
             pygame.display.update()
-g=Game()
-
-g.intro_screen()
+g=Game()        #creates the game
+g.intro_screen() 
 g.new()
-
 
 p=Player(g,4,6) #skapar objektet player for att dela dess info med game class
 
 while g.running:
     
-    g.statemanager(p.level,p.f.enemyhp,p.f.playerhp,p.win)
+    g.statemanager(p.level,p.f.enemyhp,p.f.playerhp,p.win) #feed in info from player class so the level,can be used and the HP's can be displayed
     
     
 

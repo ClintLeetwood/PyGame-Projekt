@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
                 
                 self.check()
                 
-                if self.f==0:
+                if self.f==0:   #if fight is finished player is put back in hallway and a new sequence starts
                 
                     self.rect.y=self.y+7
 
@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
                     if self.win==2:
                         self.f=Fight(120,100) 
                     else:
-                        self.f=Fight(100,100)
+                        self.f=Fight(100,100) 
         else:
             hits=pygame.sprite.spritecollide(self,self.game.door1,False)
             if hits:
@@ -102,7 +102,7 @@ class Player(pygame.sprite.Sprite):
                     self.level="hallway" 
                     self.f=Fight(120,100) 
                 elif self.f==0 and self.win==3:
-                    self.f=Fight(120,100)
+                    self.f=Fight(120,100) #this fight sequence is started to not get a boolean error
                     self.level="you_win"
         else:
             hits=pygame.sprite.spritecollide(self,self.game.door1,False)
@@ -126,7 +126,7 @@ class Player(pygame.sprite.Sprite):
         
             
     
-    def check(self):
+    def check(self): #function checks if the fight is finished
         
         if self.f.status()==False:
             if self.f.Win():
@@ -138,8 +138,6 @@ class Player(pygame.sprite.Sprite):
             self.f.fight()
             
         
-    
-
 
 
     def movement(self):
@@ -162,7 +160,7 @@ class Player(pygame.sprite.Sprite):
             hits= pygame.sprite.spritecollide(self,self.game.blocks,False)
             if hits:
                 
-                if self.x_change>0:
+                if self.x_change>0:                 #keeps the player from going through the wall
                     self.rect.x=hits[0].rect.left-self.rect.width
                 if self.x_change<0:
                     self.rect.x=hits[0].rect.right
@@ -324,12 +322,10 @@ class Fight:
         if self.playerchoice():
         
             self.computerchoice()
-            
         
-            
 
     def status(self):
-        return not(self.Win() or  self.lose())
+        return not(self.Win() or  self.lose())  #function gets checked by player class to see if the fight has finished
         
         
 class Ground(pygame.sprite.Sprite):
@@ -351,13 +347,7 @@ class Ground(pygame.sprite.Sprite):
         self.rect.x=self.x
         self.rect.y=self.y
     
-
-
-
-    
-        
-        
-class Fighter(pygame.sprite.Sprite):
+class Fighter(pygame.sprite.Sprite): #For now just an image with no other functionality
     def  __init__(self,game,x,y):
         self.game=game
         self._layer=FIGHTER_LAYER
@@ -375,13 +365,9 @@ class Fighter(pygame.sprite.Sprite):
         self.rect.x=self.x
         self.rect.y=self.y
         
-    
 
 
-                
-
-
-class Enemy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite): #see comment on Fighter Class
     def __init__(self,game,x,y):
         self.game=game
         self._layer=ENEMY_LAYER
@@ -439,9 +425,7 @@ class Door1(pygame.sprite.Sprite): #Creates the doors
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
-    def open(self):
-
-        self.open=True
+    
 class Door2(pygame.sprite.Sprite): #Creates the doors
     
     
@@ -483,7 +467,7 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
         self.rect.x=self.x
         self.rect.y=self.y
 
-class Button:
+class Button:               #To create a button when called upon with its spritesheet best works with a width of 100px and height of 50px
     def __init__(self,x,y,width,height,fg,content,fontsize):
         self.content=content
         self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',fontsize)
