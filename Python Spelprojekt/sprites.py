@@ -111,8 +111,8 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y=hits[0].rect.bottom
         
             
-                 
-        self.movement()
+        if self.level=="hallway":
+            self.movement()
         self.animate()
 
         self.rect.x += self.x_change
