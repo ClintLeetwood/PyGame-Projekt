@@ -4,6 +4,16 @@ import pygame
 from config import *
 import math
 import random
+class Spritesheet:
+    def __init__(self,file):
+        self.sheet=pygame.image.load(file).convert()
+
+    def get_sprite(self,x,y,width,height):
+        sprite=pygame.Surface([width,height])
+        sprite.blit(self.sheet,(0,0),(x,y,width,height))
+        sprite.set_colorkey(BLACK)
+        return sprite
+
 class Player(pygame.sprite.Sprite):
     def __init__(self,game,x,y): #x,y gives the location of the player 
         self.game=game
@@ -18,9 +28,9 @@ class Player(pygame.sprite.Sprite):
         self.x_change=0
         self.y_change=0
         self.facing='down'
-
-        self.image=pygame.Surface([self.width,self.height])#right now the player is sqaure fill in pic later
-        self.image.fill(RED)
+        self.animation_loop=1
+        self.image=self.game.character_spritesheet.get_sprite(36,-1,self.width,self.height)
+        
 
         self.rect=self.image.get_rect() #Where the player is 'hitbox' etc
         self.rect.x=self.x
@@ -43,7 +53,7 @@ class Player(pygame.sprite.Sprite):
                 
                 self.check()
                 
-                if self.f==0:
+                if self.f==0:   #if fight is finished player is put back in hallway and a new sequence starts
                 
                     self.rect.y=self.y+7
 
@@ -52,7 +62,11 @@ class Player(pygame.sprite.Sprite):
                         self.f=Fight(100,100) 
                     else:
                         self.f=Fight(70,100)
-        
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
           
         if self.win==1:
             if pygame.sprite.spritecollide(self,self.game.door2,False):
@@ -68,8 +82,12 @@ class Player(pygame.sprite.Sprite):
                     if self.win==2:
                         self.f=Fight(120,100) 
                     else:
-                        self.f=Fight(100,100)
-        
+                        self.f=Fight(100,100) 
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
             
                  
         if self.win==2:
@@ -80,18 +98,22 @@ class Player(pygame.sprite.Sprite):
             
                 if self.f==0 and self.win==2:
             
-                    
                     self.rect.y=self.y+7
                     self.level="hallway" 
                     self.f=Fight(120,100) 
                 elif self.f==0 and self.win==3:
-                    
+                    self.f=Fight(120,100) #this fight sequence is started to not get a boolean error
                     self.level="you_win"
-        
+        else:
+            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            if hits:
+                if self.y_change<0:
+                    self.rect.y=hits[0].rect.bottom
         
             
-                 
-        self.movement()
+        if self.level=="hallway":
+            self.movement()
+        self.animate()
 
         self.rect.x += self.x_change
         self.collide_blocks('x')
@@ -104,20 +126,18 @@ class Player(pygame.sprite.Sprite):
         
             
     
-    def check(self):
+    def check(self): #function checks if the fight is finished
         
         if self.f.status()==False:
             if self.f.Win():
                 self.win+=1
 
             self.f=0
-            print(self.win)
+            
         else:
             self.f.fight()
             
         
-    
-
 
 
     def movement(self):
@@ -140,7 +160,7 @@ class Player(pygame.sprite.Sprite):
             hits= pygame.sprite.spritecollide(self,self.game.blocks,False)
             if hits:
                 
-                if self.x_change>0:
+                if self.x_change>0:                 #keeps the player from going through the wall
                     self.rect.x=hits[0].rect.left-self.rect.width
                 if self.x_change<0:
                     self.rect.x=hits[0].rect.right
@@ -153,9 +173,54 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y=hits[0].rect.top - self.rect.height
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
+    def animate(self):
+        down_animations = [self.game.character_spritesheet.get_sprite(36, -1, self.width, self.height),
+                            self.game.character_spritesheet.get_sprite(4, -1, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(68, -1, self.width, self.height)]
 
-    
-       
+        left_animations = [self.game.character_spritesheet.get_sprite(36, 31, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(3, 31, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(68, 31, self.width, self.height)]
+
+        right_animations = [ self.game.character_spritesheet.get_sprite(38, 63, self.width, self.height),
+                            self.game.character_spritesheet.get_sprite(6, 63, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(70, 63, self.width, self.height)]
+
+        up_animations = [self.game.character_spritesheet.get_sprite(38, 95, self.width, self.height),
+            self.game.character_spritesheet.get_sprite(6, 95, self.width, self.height),
+                        self.game.character_spritesheet.get_sprite(70, 95, self.width, self.height)]
+        if self.facing=="down":
+            if self.y_change==0:
+                self.image=self.game.character_spritesheet.get_sprite(36,-1,self.width,self.height)
+            else:
+                self.image=down_animations[math.floor(self.animation_loop)]
+                self.animation_loop+=0.1
+                if self.animation_loop>=3:
+                    self.animation_loop=1
+        if self.facing=="up":
+            if self.y_change==0:
+                self.image=self.game.character_spritesheet.get_sprite(38,95,self.width,self.height)
+            else:
+                self.image=up_animations[math.floor(self.animation_loop)]
+                self.animation_loop+=0.1
+                if self.animation_loop>=3:
+                    self.animation_loop=1
+        if self.facing=="left":
+            if self.x_change==0:
+                self.image=self.game.character_spritesheet.get_sprite(36,31,self.width,self.height)
+            else:
+                self.image=left_animations[math.floor(self.animation_loop)]
+                self.animation_loop+=0.1
+                if self.animation_loop>=3:
+                    self.animation_loop=1
+        if self.facing=="right":
+            if self.x_change==0:
+                self.image=self.game.character_spritesheet.get_sprite(38,63,self.width,self.height)
+            else:
+                self.image=right_animations[math.floor(self.animation_loop)]
+                self.animation_loop+=0.1
+                if self.animation_loop>=3:
+                    self.animation_loop=1
             
 class Fight:
     def __init__(self,enemyhp,playerhp):
@@ -180,18 +245,24 @@ class Fight:
             self.Win()
     def playerchoice(self):
         if self.playerhp>0:
-            rectbut1=(305,200,100,50)
-            rectbut2=(305,300,100,50)
+            rectbut1=pygame.Rect(360,290,128,50)
+            rectbut2=pygame.Rect(360,350,128,50)
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut1):
-
+                pos=pygame.mouse.get_pos()
+                if event.type == pygame.MOUSEBUTTONDOWN  :
+                    if rectbut1.collidepoint( pos):
+                        
             
-                    self.player_choice=0
-                    self.attack("player")
+                        self.player_choice=0
+                        self.attack("player")
                 
-                    return True
-                elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pos(rectbut2):
-                    self.player_choice=1
+                        return True
+                    elif rectbut2.collidepoint(pos):
+                        self.player_choice=1
+                        
+                        return True
+                    else:
+                        return False
                 else:
                     return False
                   
@@ -251,23 +322,32 @@ class Fight:
         if self.playerchoice():
         
             self.computerchoice()
-            print("enemy ",self.enemyhp, "player ",self.playerhp)
         
-            
 
     def status(self):
-        return not(self.Win() or  self.lose())
+        return not(self.Win() or  self.lose())  #function gets checked by player class to see if the fight has finished
         
         
+class Ground(pygame.sprite.Sprite):
+    def __init__(self,game,x,y):
+        self.game=game
+        self._layer=GROUND_LAYER
+        self.groups=self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self,self.groups)
 
+        self.x=x*TILESIZE
+        self.y=y*TILESIZE
+        self.width=TILESIZE
+        self.height=TILESIZE
+        #self.image=pygame.Surface([self.width,self.height])
+        #self.image.fill(RED)
+        self.image=self.game.terrain_spritesheet.get_sprite(22,34,self.width,self.height)
+
+        self.rect=self.image.get_rect()
+        self.rect.x=self.x
+        self.rect.y=self.y
     
-
-
-
-    
-        
-        
-class Fighter(pygame.sprite.Sprite):
+class Fighter(pygame.sprite.Sprite): #For now just an image with no other functionality
     def  __init__(self,game,x,y):
         self.game=game
         self._layer=FIGHTER_LAYER
@@ -278,21 +358,16 @@ class Fighter(pygame.sprite.Sprite):
         self.y=y*ARENASIZE
         self.width=ARENASIZE
         self.height=ARENASIZE
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(RED)
+        self.image=self.game.fighter_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
         
-    
 
 
-                
-
-
-class Enemy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite): #see comment on Fighter Class
     def __init__(self,game,x,y):
         self.game=game
         self._layer=ENEMY_LAYER
@@ -303,9 +378,9 @@ class Enemy(pygame.sprite.Sprite):
         self.y=y*ARENASIZE
         self.width=ARENASIZE
         self.height=ARENASIZE
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLUE)
+        
+        self.image=self.game.enemy_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
@@ -326,9 +401,7 @@ class Block(pygame.sprite.Sprite): #creates the walls
         self.width=TILESIZE
         self.height=TILESIZE
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLUE)
-
+        self.image=self.game.wall_spritesheet.get_sprite(0,0,self.width,self.height)
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
@@ -347,15 +420,12 @@ class Door1(pygame.sprite.Sprite): #Creates the doors
         self.width=TILESIZE
         self.height=TILESIZE+1
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BROWN)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
-    def open(self):
-
-        self.open=True
+    
 class Door2(pygame.sprite.Sprite): #Creates the doors
     
     
@@ -372,8 +442,7 @@ class Door2(pygame.sprite.Sprite): #Creates the doors
         self.width=TILESIZE
         self.height=TILESIZE+1
 
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(BLACK)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
@@ -391,16 +460,15 @@ class Door3(pygame.sprite.Sprite): #Creates the doors
         self.y=y*TILESIZE
         self.width=TILESIZE
         self.height=TILESIZE+1
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(RED)
+        self.image=self.game.door_spritesheet.get_sprite(0,0,self.width,self.height)
+        
 
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
 
-class Button:
-    def __init__(self,x,y,width,height,fg,bg,content,fontsize):
+class Button:               #To create a button when called upon with its spritesheet best works with a width of 100px and height of 50px
+    def __init__(self,x,y,width,height,fg,content,fontsize):
         self.content=content
         self.font=pygame.font.Font('Python Spelprojekt/comici.ttf',fontsize)
         self.x=x
@@ -408,10 +476,11 @@ class Button:
         self.height=height
         self.width=width
         self.fg=fg
-        self.bg=bg
-
-        self.image=pygame.Surface([self.width,self.height])
-        self.image.fill(self.bg)
+        
+        self.button_spritesheet=Spritesheet('Python Spelprojekt/img/button.png')
+        self.image=self.button_spritesheet.get_sprite(0,9,self.width,self.height)
+        
+        
         self.rect=self.image.get_rect()
         self.rect.x=self.x
         self.rect.y=self.y
