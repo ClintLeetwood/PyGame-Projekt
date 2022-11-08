@@ -84,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                     else:
                         self.f=Fight(100,100) 
         else:
-            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            hits=pygame.sprite.spritecollide(self,self.game.door2,False)
             if hits:
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
@@ -105,7 +105,7 @@ class Player(pygame.sprite.Sprite):
                     self.f=Fight(120,100) #this fight sequence is started to not get a boolean error
                     self.level="you_win"
         else:
-            hits=pygame.sprite.spritecollide(self,self.game.door1,False)
+            hits=pygame.sprite.spritecollide(self,self.game.door3,False)
             if hits:
                 if self.y_change<0:
                     self.rect.y=hits[0].rect.bottom
